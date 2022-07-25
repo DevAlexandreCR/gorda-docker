@@ -1,2 +1,4 @@
 .idea/
 .vscode/
+ssh_key_id_rsa
+ssh_key_id_rsa.pub
