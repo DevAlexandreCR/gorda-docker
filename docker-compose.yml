@@ -1,0 +1,22 @@
+version: '3.5'
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+services:
+  gorda:
+    container_name: gorda-app
+    build:
+      context: .
+    ports:
+      - "4000:4000"
+      - "5000:5000"
+      - "5001:5001"
+      - "5005:5005"
+      - "9000:9000"
+      - "9099:9099"
+    volumes:
+      - "../:/home/dev/"
+    tty: true
