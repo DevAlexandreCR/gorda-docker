@@ -5,6 +5,10 @@ CONTAINER_FIRST_STARTUP="CONTAINER_FIRST_STARTUP"
 if [ ! -e /home/dev/apps/$CONTAINER_FIRST_STARTUP ]; then
     touch /home/dev/apps/$CONTAINER_FIRST_STARTUP
     echo "installing apps..."
+    rm -rf functions || exit && rm -rf api || exit && rm -rf admin || exit && \
+    git clone git@github.com:DevAlexandreCR/gorda-functions.git functions && \
+    git clone git@github.com:DevAlexandreCR/gorda-api.git api && \
+    git clone git@github.com:DevAlexandreCR/admin-driver.git admin
 
     # Install global dependencies
     npm install --location=global npm@8.15.0 && \
@@ -16,15 +20,10 @@ if [ ! -e /home/dev/apps/$CONTAINER_FIRST_STARTUP ]; then
     #######################################################
 
     echo "installing functions..."
-    rm -rf functions || exit && rm -rf api || exit && rm -rf admin || exit && \
-    git clone git@github.com:DevAlexandreCR/gorda-functions.git functions && \
-    git clone git@github.com:DevAlexandreCR/gorda-api.git api && \
-    git clone git@github.com:DevAlexandreCR/admin-driver.git admin
 
     cd /home/dev/apps/functions || exit
-
     git checkout develop && npm install --no-interaction && \
-    cp .env.example .env
+    npm run build
 #    sed -i 's/APP_NAME=Laravel/APP_NAME=DServer/' .env && \
 #    sed -i 's/DS_URL=/DS_URL=http:\/\/dserver.test\/api\/result-request/' .env && \
 #    sed -i 's/ACS_URL=/ACS_URL=http:\/\/acs.test\/api\/v1\/authenticate/' .env && \
@@ -46,9 +45,6 @@ if [ ! -e /home/dev/apps/$CONTAINER_FIRST_STARTUP ]; then
 
     echo "installing Api..."
     cd /home/dev/apps/api || exit
-    chmod -R a+w storage
-    chmod a+w build
-
     git checkout develop && \
     cp .env.example .env && cp .env.example .env.testing && \
     npm install --no-interaction
