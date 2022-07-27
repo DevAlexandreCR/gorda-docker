@@ -1,13 +1,8 @@
 version: '3.5'
 
-networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
 services:
   gorda:
-    container_name: gorda-app
+    container_name: workspace
     build:
       context: .
     ports:
@@ -18,5 +13,5 @@ services:
       - "9000:9000"
       - "9099:9099"
     volumes:
-      - "../:/home/dev/"
+      - ../:/home/dev/apps/
     tty: true

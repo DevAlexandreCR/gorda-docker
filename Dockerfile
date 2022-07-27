@@ -9,21 +9,6 @@ USER root
 RUN apt-get update -y \
     && apt-get install -y ssh
 
-#Establish the operating directory of OpenSSH
-RUN mkdir /var/run/sshd
-
-#Allow Root login
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' \
-    /etc/ssh/sshd_config
-
-
-#SSH login fix
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional \
-    pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-#Set Root password
-RUN echo 'root:root' | chpasswd
-
 # create user no root
 RUN set -xe; \
     groupadd -g 1000 dev && \
@@ -43,8 +28,11 @@ RUN rm -f /etc/service/sshd/down \
         && chmod 644 /root/.ssh/authorized_keys /root/.ssh/id_rsa.pub \
     && chmod 400 /root/.ssh/id_rsa \
     && cp -rf /root/.ssh /home/dev \
-    && chown -R dev:dev /home/dev/.ssh \
-    && ssh-keyscan github.com >> /home/dev/.ssh/known_hosts
+    && chown -R dev:dev /home/dev/.ssh
+
+RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
+    ssh-keyscan github.com >> /home/dev/.ssh/known_hosts && \
+    echo "Host github.com \n IdentityFile /home/dev/.ssh/id_rsa" >> /home/dev/.ssh/config
 
 # install node and git
 USER root
@@ -57,7 +45,9 @@ RUN apt-get install curl -y \
         && nvm install ${NODE_VERSION} \
         && nvm use ${NODE_VERSION} \
         && nvm alias ${NODE_VERSION} \
-        && apt install git -y
+        && apt install git -y \
+        && chmod -R a+w /home/dev/.nvm/ \
+        && chmod a+w /home/dev/.nvm/
 
 # Source NVM when loading bash since ~/.profile isn't loaded on non-login shell
 RUN echo "" >> ~/.bashrc && \
@@ -82,42 +72,21 @@ RUN find $NVM_DIR -type f -name node -exec ln -s {} /usr/local/bin/node \; && \
     ln -s $NODE_MODS_DIR/vue-cli/bin/vue-init /usr/local/bin/vue-init && \
     ln -s $NODE_MODS_DIR/vue-cli/bin/vue-list /usr/local/bin/vue-list
 
-# Instal global dependencies
-#RUN npm install -g vue cli \
-#    && npm install -g firebase-tools \
+USER root
+
+# Clean up
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm /var/log/lastlog /var/log/faillog
+
+
+ADD ./entrypoint.sh /
 
 USER dev
 
 ## clone repositories
-WORKDIR /home/dev
-# Install functions
+RUN mkdir /home/dev/apps
 
-RUN eval "$(ssh-agent -s)"
-RUN exec ssh-agent bash && ssh-add ~/.ssh/id_rsa
-# install functions
-RUN  git clone git@github.com:DevAlexandreCR/gorda-functions.git functions
+WORKDIR /home/dev/apps
 
-WORKDIR /home/dev/functions
-
-RUN npm install
-#    && npm run build
-
-WORKDIR /home/dev
-# Install api
-RUN  git clone git@github.com:DevAlexandreCR/gorda-api.git api
-
-WORKDIR /home/dev/api
-
-RUN npm install \
-    && cp .env.example .env
-
-WORKDIR /home/dev
-# Install admin
-RUN  git clone git@github.com:DevAlexandreCR/admin-driver.git admin
-
-WORKDIR /home/dev/admin
-
-RUN npm install \
-    && cp .env.example .env
-
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["/entrypoint.sh"]
