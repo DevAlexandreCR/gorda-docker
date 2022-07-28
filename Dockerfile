@@ -49,31 +49,6 @@ RUN apt-get install curl -y \
         && chmod -R a+w /home/dev/.nvm/ \
         && chmod a+w /home/dev/.nvm/
 
-USER dev
-
-# Source NVM when loading bash since ~/.profile isn't loaded on non-login shell
-RUN echo "" >> ~/.bashrc && \
-    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.bashrc
-
-USER root
-# Add NVM binaries to root's .bashrc
-RUN echo "" >> ~/.bashrc && \
-    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.bashrc
-
-ENV PATH $PATH:/home/dev/.node-bin
-
-RUN find $NVM_DIR -type f -name node -exec ln -s {} /usr/local/bin/node \; && \
-    NODE_MODS_DIR="$NVM_DIR/versions/node/$(node -v)/lib/node_modules" && \
-    ln -s $NODE_MODS_DIR/bower/bin/bower /usr/local/bin/bower && \
-    ln -s $NODE_MODS_DIR/gulp/bin/gulp.js /usr/local/bin/gulp && \
-    ln -s $NODE_MODS_DIR/npm/bin/npm-cli.js /usr/local/bin/npm && \
-    ln -s $NODE_MODS_DIR/npm/bin/npx-cli.js /usr/local/bin/npx && \
-    ln -s $NODE_MODS_DIR/vue-cli/bin/vue /usr/local/bin/vue && \
-    ln -s $NODE_MODS_DIR/vue-cli/bin/vue-init /usr/local/bin/vue-init && \
-    ln -s $NODE_MODS_DIR/vue-cli/bin/vue-list /usr/local/bin/vue-list
-
 # Install Zsh
 RUN apt install -y zsh
 
@@ -104,6 +79,32 @@ bindkey "^?" backward-delete-char\n' >> /home/dev/.zshrc && \
     echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.zshrc && \
     echo "" >> /home/dev/.zshrc && \
     echo "" >> /home/dev/.zshrc
+
+USER dev
+
+# Source NVM when loading bash since ~/.profile isn't loaded on non-login shell
+RUN echo "" >> ~/.zshrc && \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.zshrc
+
+USER root
+# Add NVM binaries to root's .bashrc
+RUN echo "" >> ~/.zshrc && \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.zshrc
+
+ENV PATH $PATH:/home/dev/.node-bin
+ENV PATH $PATH:/root/.node-bin
+
+RUN find $NVM_DIR -type f -name node -exec ln -s {} /usr/local/bin/node \; && \
+    NODE_MODS_DIR="$NVM_DIR/versions/node/$(node -v)/lib/node_modules" && \
+    ln -s $NODE_MODS_DIR/bower/bin/bower /usr/local/bin/bower && \
+    ln -s $NODE_MODS_DIR/gulp/bin/gulp.js /usr/local/bin/gulp && \
+    ln -s $NODE_MODS_DIR/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    ln -s $NODE_MODS_DIR/npm/bin/npx-cli.js /usr/local/bin/npx && \
+    ln -s $NODE_MODS_DIR/vue-cli/bin/vue /usr/local/bin/vue && \
+    ln -s $NODE_MODS_DIR/vue-cli/bin/vue-init /usr/local/bin/vue-init && \
+    ln -s $NODE_MODS_DIR/vue-cli/bin/vue-list /usr/local/bin/vue-list
 
 USER root
 
