@@ -49,6 +49,8 @@ RUN apt-get install curl -y \
         && chmod -R a+w /home/dev/.nvm/ \
         && chmod a+w /home/dev/.nvm/
 
+USER dev
+
 # Source NVM when loading bash since ~/.profile isn't loaded on non-login shell
 RUN echo "" >> ~/.bashrc && \
     echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
@@ -57,7 +59,7 @@ RUN echo "" >> ~/.bashrc && \
 USER root
 # Add NVM binaries to root's .bashrc
 RUN echo "" >> ~/.bashrc && \
-    echo 'export NVM_DIR="/home/dev/.nvm"' >> ~/.bashrc && \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
     echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.bashrc
 
 ENV PATH $PATH:/home/dev/.node-bin
@@ -97,6 +99,9 @@ bindkey "^?" backward-delete-char\n' >> /home/dev/.zshrc && \
     sed -i '1iZSH_AUTOSUGGEST_STRATEGY=(history completion)' /home/dev/.zshrc && \
     sed -i '1iZSH_AUTOSUGGEST_USE_ASYNC=1' /home/dev/.zshrc && \
     sed -i '1iTERM=xterm-256color' /home/dev/.zshrc && \
+    echo "" >> ~/.bashrc && \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> ~/.zshrc && \
     echo "" >> /home/dev/.zshrc && \
     echo "" >> /home/dev/.zshrc
 
