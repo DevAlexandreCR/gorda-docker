@@ -1,0 +1,19 @@
+{
+  "name": "assets/default_user.png",
+  "bucket": "gorda-driver.appspot.com",
+  "contentType": "image/png",
+  "metageneration": 1,
+  "generation": 1656952104663,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "bf24aaa9-ba5d-4597-8b9f-5b9415274625"
+  ],
+  "timeCreated": "2022-07-04T16:28:24.662Z",
+  "updated": "2022-07-04T16:28:24.664Z",
+  "size": 17884,
+  "md5Hash": "vb/rLcwgJOrk2h4wGnlr7A==",
+  "crc32c": "3330057357"
+}

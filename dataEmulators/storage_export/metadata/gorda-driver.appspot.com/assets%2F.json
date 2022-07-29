@@ -1,0 +1,17 @@
+{
+  "name": "assets/",
+  "bucket": "gorda-driver.appspot.com",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1656952057726,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [],
+  "timeCreated": "2022-07-04T16:27:37.725Z",
+  "updated": "2022-07-04T16:27:37.725Z",
+  "size": 0,
+  "md5Hash": "1B2M2Y8AsgTpgAmY7PhCfg==",
+  "crc32c": "0"
+}

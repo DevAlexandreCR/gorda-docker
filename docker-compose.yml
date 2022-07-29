@@ -5,6 +5,10 @@ services:
     container_name: workspace
     build:
       context: .
+      args:
+        - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+    environment:
+      - FIREBASE_TOKEN=${FIREBASE_TOKEN}
     ports:
       - "4000:4000"
       - "5000:5000"

@@ -2,6 +2,9 @@ FROM ubuntu
 
 LABEL maintainer="devalexandrecr@gmail.com"
 
+# Set Environment Variables
+ENV DEBIAN_FRONTEND noninteractive
+
 # Start as root
 USER root
 
@@ -117,6 +120,8 @@ RUN apt-get clean && \
 ADD ./entrypoint.sh /
 
 USER dev
+
+COPY dataEmulators /home/dev/dataEmulators
 
 ## clone repositories
 RUN mkdir /home/dev/apps

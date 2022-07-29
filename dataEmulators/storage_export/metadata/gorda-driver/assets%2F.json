@@ -1,0 +1,17 @@
+{
+  "name": "assets/",
+  "bucket": "gorda-driver",
+  "contentType": "text/plain",
+  "metageneration": 1,
+  "generation": 1659051693811,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [],
+  "timeCreated": "2022-07-28T23:41:33.810Z",
+  "updated": "2022-07-28T23:41:33.810Z",
+  "size": 0,
+  "md5Hash": "1B2M2Y8AsgTpgAmY7PhCfg==",
+  "crc32c": "0"
+}

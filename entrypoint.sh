@@ -43,17 +43,20 @@ if [ ! -e /home/dev/apps/$CONTAINER_FIRST_STARTUP ]; then
 
     echo "installing Admin..."
     cd /home/dev/apps/admin || exit
-    chmod -R a+w .
-    chmod a+w build
+    chmod -R 777 .
 
     git checkout develop && \
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
     npm install --no-interaction
 #    sed -i 's/APP_URL=http:\/\/localhost\//APP_URL=http:\/\/mpi.test/' .env && \
 
+    cd /home/dev/apps/admin || exit
+    cp -r /home/dev/dataEmulators dataEmulators && \
     echo "installation ended"
 
 else
   echo "Apps running..."
-  tail -f /dev/null
+  cd /home/dev/apps/admin || exit
+  npm run start:emulators
+#  tail -f /dev/null
 fi
