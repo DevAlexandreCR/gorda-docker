@@ -18,5 +18,5 @@ services:
       - "9099:9099"
       - "9005:9005"
     volumes:
-      - ../:/home/dev/apps/
+      - ../:/home/node/apps/
     tty: true
