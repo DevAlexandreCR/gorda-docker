@@ -28,13 +28,6 @@ RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
     ssh-keyscan github.com >> /home/node/.ssh/known_hosts && \
     echo "Host github.com \n IdentityFile /home/node/.ssh/id_rsa" >> /home/node/.ssh/config
 
-# install node and git
-USER root
-    # Install global dependencies
-RUN npm install --location=global npm@8.15.1 && \
-    npm install --location=global vue cli && \
-    npm install --location=global firebase-tools
-
 # Install Zsh and java
 RUN apk add zsh openjdk11
 
