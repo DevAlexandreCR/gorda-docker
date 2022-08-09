@@ -10,11 +10,6 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     git clone git@github.com:DevAlexandreCR/gorda-api.git api && \
     git clone git@github.com:DevAlexandreCR/admin-driver.git admin
 
-    # Install global dependencies
-    npm install --location=global npm@8.15.1 && \
-    npm install --location=global vue cli && \
-    npm install --location=global firebase-tools
-
     #######################################################
     ######################  FUNCTIONS  ###########################
     #######################################################
@@ -46,8 +41,9 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
 
     git checkout develop && \
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
+    cp firebase.example.json firebase.json
     npm install --no-interaction
-#    sed -i 's/APP_URL=http:\/\/localhost\//APP_URL=http:\/\/mpi.test/' .env && \
+    sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
 
     cd /home/node/apps/admin || exit
     cp -r /home/node/dataEmulators dataEmulators && \

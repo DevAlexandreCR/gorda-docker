@@ -61,6 +61,11 @@ USER root
 
 ADD ./entrypoint.sh /
 
+    # Install global dependencies
+RUN npm install --location=global npm@latest && \
+    npm install --location=global vue cli && \
+    npm install --location=global firebase-tools
+
 USER node
 
 RUN mkdir ~/.npm-global \

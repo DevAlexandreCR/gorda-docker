@@ -1,24 +1,27 @@
-version: '3.9'
-
+version: '3.7'
+networks:
+  local:
+    driver: bridge
 services:
   gorda:
-    container_name: workspace
     build:
       context: .
       args:
         - FIREBASE_TOKEN=${FIREBASE_TOKEN}
     environment:
       - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+    networks:
+      - local
     ports:
-      - "127.0.0.1:4000:4000"
-      - "127.0.0.1:4400:4400"
-      - "127.0.0.1:4500:4500"
-      - "127.0.0.1:5000:5000"
-      - "127.0.0.1:5001:5001"
-      - "127.0.0.1:5005:5005"
-      - "127.0.0.1:9000:9000"
-      - "127.0.0.1:9199:9199"
-      - "127.0.0.1:9005:9005"
+      - "4000:4000"
+      - "4400:4400"
+      - "4500:4500"
+      - "5000:5000"
+      - "5001:5001"
+      - "5005:5005"
+      - "9000:9000"
+      - "9199:9199"
+      - "9099:9099"
+      - "9005:9005"
     volumes:
       - ../:/home/node/apps/
-    tty: true
