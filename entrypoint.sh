@@ -29,7 +29,8 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     cd /home/node/apps/api || exit
     git checkout develop && \
     cp .env.example .env && cp .env.example .env.testing && \
-    npm install --no-interaction
+    npm install --no-interaction && \
+    npm run build
 #    sed -i 's/VISA_CAVV_A=/VISA_CAVV_A="0131517010204061"/' .env && \
 
     #######################################################
@@ -42,7 +43,8 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     git checkout develop && \
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
     cp firebase.example.json firebase.json
-    npm install --no-interaction
+    npm install --no-interaction && \
+    npm run build:dev
     sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
 
     cd /home/node/apps/admin || exit
