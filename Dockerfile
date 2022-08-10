@@ -7,7 +7,7 @@ USER root
 
 #Update APT repository & Install OpenSSH
 RUN apk update \
-    && apk --no-cache add openssh curl git
+    && apk --no-cache add openssh curl git chromium
 
 COPY ssh_key_id_rsa /tmp/id_rsa
 COPY ssh_key_id_rsa.pub /tmp/id_rsa.pub
@@ -74,6 +74,8 @@ RUN mkdir ~/.npm-global \
 ENV PATH $PATH:/home/node/.node-bin
 ENV PATH $PATH:/root/.node-bin
 ENV PATH=~/.npm-global/bin:$PATH
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 COPY dataEmulators /home/node/dataEmulators
 
