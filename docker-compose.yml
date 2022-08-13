@@ -4,8 +4,25 @@ networks:
     driver: bridge
 services:
   gorda:
+    container_name: gorda_dock
     build:
       context: .
+      args:
+        - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+    environment:
+      - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+    networks:
+      - local
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../:/home/node/apps/
+  emulators:
+    container_name: emulators
+    depends_on:
+      - gorda
+    build:
+      context: ./emulators
       args:
         - FIREBASE_TOKEN=${FIREBASE_TOKEN}
     environment:
@@ -16,9 +33,8 @@ services:
       - "4000:4000"
       - "4400:4400"
       - "4500:4500"
-      - "5000:5000"
-      - "5001:5001"
       - "5005:5005"
+      - "5001:5001"
       - "9000:9000"
       - "9199:9199"
       - "9099:9099"

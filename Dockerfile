@@ -29,7 +29,7 @@ RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config && \
     echo "Host github.com \n IdentityFile /home/node/.ssh/id_rsa" >> /home/node/.ssh/config
 
 # Install Zsh and java
-RUN apk add zsh openjdk11
+RUN apk add zsh
 
 USER node
 
@@ -77,7 +77,7 @@ ENV PATH=~/.npm-global/bin:$PATH
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
-COPY dataEmulators /home/node/dataEmulators
+COPY emulators/dataEmulators /home/node/dataEmulators
 
 ## clone repositories
 RUN mkdir /home/node/apps
