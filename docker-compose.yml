@@ -40,4 +40,4 @@ services:
       - "9099:9099"
       - "9005:9005"
     volumes:
-      - ../:/home/node/apps/
+      - ../:/home/node/firebase/

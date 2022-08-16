@@ -77,8 +77,6 @@ ENV PATH=~/.npm-global/bin:$PATH
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
-COPY emulators/dataEmulators /home/node/dataEmulators
-
 ## clone repositories
 RUN mkdir /home/node/apps
 
