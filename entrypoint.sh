@@ -46,12 +46,10 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     npm install --no-interaction && \
     npm run build:dev
     sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
-    cd /home/node/apps/admin || exit
-    cp -r /home/node/dataEmulators dataEmulators && \
     echo "installation ended"
 
 else
   echo "Apps running..."
   cd /home/node/apps/admin || exit
-  npm run start:emulators
+  npm run serve
 fi
