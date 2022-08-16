@@ -30,8 +30,6 @@ RUN firebase setup:emulators:ui
 
 RUN mkdir /home/node/firebase
 
-COPY dataEmulators /home/node/firebase/dataEmulators
-
 WORKDIR /home/node/firebase/admin
 
 ENTRYPOINT ["npm", "run", "start:emulators"]
