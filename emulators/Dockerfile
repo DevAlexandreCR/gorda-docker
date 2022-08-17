@@ -8,8 +8,6 @@ USER root
 # Install Zsh and java
 RUN apk add openjdk11
 
-ADD ./entrypoint.sh /
-
     # Install global dependencies
 RUN npm install --location=global npm@latest && \
     npm install --location=global firebase-tools
@@ -26,6 +24,9 @@ ENV PATH=~/.npm-global/bin:$PATH
 RUN firebase setup:emulators:database
 RUN firebase setup:emulators:ui
 
-WORKDIR /home/node
 
-ENTRYPOINT ["/entrypoint.sh"]
+RUN mkdir /home/node/apps
+
+WORKDIR /home/node/firebase/admin
+
+ENTRYPOINT ["npm", "run", "start:emulators"]

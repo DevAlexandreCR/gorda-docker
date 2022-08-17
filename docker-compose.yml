@@ -15,6 +15,21 @@ services:
       - frontend
     ports:
       - "5000:5000"
+    volumes:
+      - ../:/home/node/apps/
+  emulators:
+    container_name: emulators
+    depends_on:
+      - gorda
+    build:
+      context: ./emulators
+      args:
+        - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+    environment:
+      - FIREBASE_TOKEN=${FIREBASE_TOKEN}
+    networks:
+      - backend
+    ports:
       - "4000:4000"
       - "4400:4400"
       - "4500:4500"
@@ -25,4 +40,4 @@ services:
       - "9099:9099"
       - "9005:9005"
     volumes:
-      - ../:/home/node/apps/
+      - ../:/home/node/firebase
