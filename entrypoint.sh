@@ -44,7 +44,6 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
     cp firebase.example.json firebase.json
     npm install --no-interaction && \
-    npm run build:dev
     sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
     cp -r /home/node/dataEmulators dataEmulators && \
     echo "installation ended"
@@ -52,5 +51,5 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
 else
   echo "Apps running..."
   cd /home/node/apps/admin || exit
-  npm run serve
+  npm run start:emulators
 fi

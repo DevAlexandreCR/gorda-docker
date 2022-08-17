@@ -79,6 +79,9 @@ ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 COPY emulators/dataEmulators /home/node/dataEmulators
 
+RUN firebase setup:emulators:database
+RUN firebase setup:emulators:ui
+
 ## clone repositories
 RUN mkdir /home/node/apps
 
