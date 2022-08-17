@@ -25,7 +25,7 @@ RUN firebase setup:emulators:database
 RUN firebase setup:emulators:ui
 
 
-RUN mkdir /home/node/apps
+RUN mkdir /home/node/firebase
 
 WORKDIR /home/node/firebase/admin
 

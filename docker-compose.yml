@@ -16,7 +16,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ../:/home/node/apps/
+      - ../:/home/node/apps
   emulators:
     container_name: emulators
     depends_on:
