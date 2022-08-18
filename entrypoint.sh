@@ -51,5 +51,5 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
 else
   echo "Apps running..."
   cd /home/node/apps/admin || exit
-  npm run watch
+  tail -f /dev/null
 fi
