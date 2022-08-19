@@ -42,3 +42,9 @@ services:
       - "9005:9005"
     volumes:
       - ../:/home/node/firebase
+  node:
+    container_name: node_interpreter
+    build:
+      context: ./node
+    networks:
+      - backend
