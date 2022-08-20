@@ -21,9 +21,11 @@ ENV PATH $PATH:/home/node/.node-bin
 ENV PATH $PATH:/root/.node-bin
 ENV PATH=~/.npm-global/bin:$PATH
 
-RUN firebase setup:emulators:database
-RUN firebase setup:emulators:ui
+RUN firebase setup:emulators:database \
+    && firebase setup:emulators:storage \
+    && firebase setup:emulators:ui
 
+ADD ./entrypoint.sh /
 
 RUN mkdir /home/node/firebase
 
