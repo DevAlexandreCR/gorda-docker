@@ -7,4 +7,4 @@ RUN npm install --location=global npm@latest && \
     npm install --location=global @vue/cli && \
     npm install --location=global typescript
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD ["tail", "-f", "/dev/null"]
