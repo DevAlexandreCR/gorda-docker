@@ -7,10 +7,6 @@ services:
     container_name: gorda_dock
     build:
       context: .
-      args:
-        - FIREBASE_TOKEN=${FIREBASE_TOKEN}
-    environment:
-      - FIREBASE_TOKEN=${FIREBASE_TOKEN}
     networks:
       - frontend
     ports:
@@ -24,10 +20,6 @@ services:
       - gorda
     build:
       context: ./emulators
-      args:
-        - FIREBASE_TOKEN=${FIREBASE_TOKEN}
-    environment:
-      - FIREBASE_TOKEN=${FIREBASE_TOKEN}
     networks:
       - backend
     ports:

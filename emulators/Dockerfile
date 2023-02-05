@@ -31,4 +31,4 @@ RUN mkdir /home/node/firebase
 
 WORKDIR /home/node/firebase/admin
 
-ENTRYPOINT ["npm", "run", "start:emulators"]
+ENTRYPOINT ["/entrypoint.sh"]
