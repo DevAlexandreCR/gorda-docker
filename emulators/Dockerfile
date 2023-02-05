@@ -27,7 +27,7 @@ RUN firebase setup:emulators:database \
 
 ADD ./entrypoint.sh /
 
-COPY ../firebaseAccount.json /home/firebaseAccount.json
+COPY ./firebaseAccount.json /home/firebaseAccount.json
 
 RUN mkdir /home/node/firebase
 

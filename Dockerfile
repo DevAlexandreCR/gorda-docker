@@ -78,7 +78,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 COPY emulators/dataEmulators /home/node/dataEmulators
-COPY ./firebaseAccount.json /home/firebaseAccount.json
+COPY emulators/firebaseAccount.json /home/firebaseAccount.json
 
 ## clone repositories
 RUN mkdir /home/node/apps
