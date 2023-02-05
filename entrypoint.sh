@@ -31,7 +31,6 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     cp .env.example .env && cp .env.example .env.testing && \
     npm install --no-interaction && \
     npm run build
-#    sed -i 's/VISA_CAVV_A=/VISA_CAVV_A="0131517010204061"/' .env && \
 
     #######################################################
     ######################  ADMIN  ##########################
