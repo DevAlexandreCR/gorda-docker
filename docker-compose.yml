@@ -1,0 +1,46 @@
+version: '3.9'
+networks:
+  backend:
+  frontend:
+services:
+  gorda:
+    container_name: gorda_dock
+    build:
+      context: .
+      args:
+        - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+    networks:
+      - frontend
+    ports:
+      - "5000:5000"
+      - "3000:3000"
+    volumes:
+      - ../:/home/node/apps
+  emulators:
+    container_name: emulators
+    depends_on:
+      - gorda
+    build:
+      context: ./emulators
+      args:
+        - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+    networks:
+      - backend
+    ports:
+      - "4000:4000"
+      - "4400:4400"
+      - "4500:4500"
+      - "5005:5005"
+      - "5001:5001"
+      - "9000:9000"
+      - "9199:9199"
+      - "9099:9099"
+      - "9005:9005"
+      - "8080:8080"
+      - "9150:9150"
+    volumes:
+      - ../:/home/node/firebase

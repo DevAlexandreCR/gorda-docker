@@ -1,0 +1,19 @@
+{
+  "name": "assets/default_user.png",
+  "bucket": "gorda-driver",
+  "contentType": "image/png",
+  "metageneration": 1,
+  "generation": 1659051700320,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "f8f23b97-a3d5-4dee-b0e0-d6ed72a56130"
+  ],
+  "timeCreated": "2022-07-28T23:41:40.319Z",
+  "updated": "2022-07-28T23:41:40.321Z",
+  "size": 23357,
+  "md5Hash": "egsCWb4Oply6j+qrPjyTyA==",
+  "crc32c": "236710643"
+}
