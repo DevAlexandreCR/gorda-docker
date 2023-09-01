@@ -1,4 +1,4 @@
-FROM node:16-alpine3.15
+FROM node:16-bullseye
 
 LABEL maintainer="devalexandrecr@gmail.com"
 
@@ -6,7 +6,10 @@ LABEL maintainer="devalexandrecr@gmail.com"
 USER root
 
 # Install Zsh and java
-RUN apk add openjdk11
+RUN apt-get update -y && \
+    mkdir /etc/ssl/certs/java/ && \
+    apt install -y --reinstall -o Dpkg::Options::="--force-confask,confnew,confmiss" --reinstall ca-certificates-java ssl-cert openssl ca-certificates && \
+    apt install -y openjdk-17-jdk openjdk-17-jre
 
     # Install global dependencies
 RUN npm install --location=global npm@latest && \
@@ -23,7 +26,8 @@ ENV PATH=~/.npm-global/bin:$PATH
 
 RUN firebase setup:emulators:database \
     && firebase setup:emulators:storage \
-    && firebase setup:emulators:ui
+    && firebase setup:emulators:ui \
+    && firebase setup:emulators:pubsub
 
 ADD ./entrypoint.sh /
 
