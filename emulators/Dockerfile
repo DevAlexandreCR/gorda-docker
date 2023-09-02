@@ -1,9 +1,12 @@
-FROM node:16-bullseye
+FROM node:18-bullseye
 
 LABEL maintainer="devalexandrecr@gmail.com"
 
 # Start as root
 USER root
+
+ADD ./entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 
 # Install Zsh and java
 RUN apt-get update -y && \
@@ -28,8 +31,6 @@ RUN firebase setup:emulators:database \
     && firebase setup:emulators:storage \
     && firebase setup:emulators:ui \
     && firebase setup:emulators:pubsub
-
-ADD ./entrypoint.sh /
 
 COPY ./firebaseAccount.json /home/firebaseAccount.json
 

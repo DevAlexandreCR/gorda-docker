@@ -1,4 +1,4 @@
-FROM node:16-alpine3.15
+FROM node:18-alpine
 
 LABEL maintainer="devalexandrecr@gmail.com"
 
@@ -60,6 +60,7 @@ bindkey "^?" backward-delete-char\n' >> /home/node/.zshrc && \
 USER root
 
 ADD ./entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 
     # Install global dependencies
 RUN npm install --location=global npm@latest && \

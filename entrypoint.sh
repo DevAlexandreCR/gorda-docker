@@ -3,7 +3,6 @@
 
 CONTAINER_FIRST_STARTUP="CONTAINER_FIRST_STARTUP"
 if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
-    touch /home/node/apps/$CONTAINER_FIRST_STARTUP
     echo "installing apps..."
     rm -rf functions || exit && rm -rf api || exit && rm -rf admin || exit && \
     git clone git@github.com:DevAlexandreCR/gorda-functions.git functions && \
@@ -19,7 +18,6 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     cd /home/node/apps/functions || exit
     git checkout develop && npm install --no-interaction && \
     npm run build
-#    sed -i 's/APP_NAME=Laravel/APP_NAME=DServer/' .env && \
 
     #######################################################
     ######################  API  ##########################
@@ -43,8 +41,9 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
     cp firebase.example.json firebase.json
     npm install --no-interaction && \
-    sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
+#    sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
     cp -r /home/node/dataEmulators dataEmulators && \
+    touch /home/node/apps/$CONTAINER_FIRST_STARTUP && \
     echo "installation ended"
 
 else
