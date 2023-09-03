@@ -16,6 +16,7 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
     echo "installing functions..."
 
     cd /home/node/apps/functions || exit
+    npm cache clean -force && \
     git checkout develop && npm install --no-interaction && \
     npm run build
 
@@ -39,9 +40,9 @@ if [ ! -e /home/node/apps/$CONTAINER_FIRST_STARTUP ]; then
 
     git checkout develop && \
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
-    cp firebase.example.json firebase.json
+    cp firebase.example.json firebase.json && \
     npm install --no-interaction && \
-#    sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
+    sed -i 's/"host": "127.0.0.1"/"host": "0.0.0.0"/' firebase.json && \
     cp -r /home/node/dataEmulators dataEmulators && \
     touch /home/node/apps/$CONTAINER_FIRST_STARTUP && \
     echo "installation ended"
