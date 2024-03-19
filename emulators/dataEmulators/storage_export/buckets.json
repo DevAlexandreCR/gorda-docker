@@ -1,10 +1,10 @@
 {
   "buckets": [
     {
-      "id": "gorda-driver.appspot.com"
+      "id": "gorda-driver"
     },
     {
-      "id": "gorda-driver"
+      "id": "gorda-driver.appspot.com"
     }
   ]
 }

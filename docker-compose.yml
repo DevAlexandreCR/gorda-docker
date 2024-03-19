@@ -4,30 +4,32 @@ networks:
   frontend:
 services:
   gorda:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
     container_name: gorda_dock
     build:
       context: .
-      args:
-        - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
     networks:
       - frontend
     ports:
       - "6000:6000"
       - "3000:3000"
     volumes:
-      - ../:/home/node/apps
+      - ../:/root/apps
   emulators:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
     container_name: emulators
     depends_on:
       - gorda
     build:
       context: ./emulators
-      args:
-        - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
     networks:
       - backend
     ports:
