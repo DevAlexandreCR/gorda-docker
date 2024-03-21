@@ -1,4 +1,4 @@
-FROM node:16-bullseye
+FROM node:18-bullseye
 
 LABEL maintainer="devalexandrecr@gmail.com"
 
@@ -27,14 +27,11 @@ ENV PATH=~/.npm-global/bin:$PATH
 RUN firebase setup:emulators:database \
     && firebase setup:emulators:storage \
     && firebase setup:emulators:ui \
-    && firebase setup:emulators:pubsub
-
-ADD ./entrypoint.sh /
-
-COPY ./firebaseAccount.json /home/firebaseAccount.json
+    && firebase setup:emulators:pubsub \
+    && firebase setup:emulators:firestore
 
 RUN mkdir /home/node/firebase
 
 WORKDIR /home/node/firebase/admin
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["tail", "-f", "/dev/null"]

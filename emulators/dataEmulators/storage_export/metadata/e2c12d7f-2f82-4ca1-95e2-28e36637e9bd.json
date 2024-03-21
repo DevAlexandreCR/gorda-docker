@@ -1,0 +1,19 @@
+{
+  "name": "assets/logo.png",
+  "bucket": "gorda-driver.appspot.com",
+  "metageneration": 1,
+  "generation": 1710811741645,
+  "contentType": "image/png",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "aec209a4-4e91-4b62-bb6d-50dafac93f52"
+  ],
+  "etag": "tRznCAnFRSkESqJFEJ3ndZMXS/c",
+  "customMetadata": {},
+  "timeCreated": "2024-03-19T01:29:01.645Z",
+  "updated": "2024-03-19T01:29:01.645Z",
+  "size": 14009,
+  "md5Hash": "YV+GQz4eBjB16yACiIlycw==",
+  "crc32c": "4004983543"
+}
