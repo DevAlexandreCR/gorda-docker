@@ -9,6 +9,14 @@ if [ ! -e /root/apps/$CONTAINER_FIRST_STARTUP ]; then
     git clone git@github.com:DevAlexandreCR/gorda-api.git api && \
     git clone git@github.com:DevAlexandreCR/admin-driver.git admin
 
+    # Change owner and permissions
+    chown -R $USER:$USER /root/apps/functions
+    chown -R $USER:$USER /root/apps/api
+    chown -R $USER:$USER /root/apps/admin
+    chmod -R 777 /root/apps/functions
+    chmod -R 777 /root/apps/api
+    chmod -R 777 /root/apps/admin
+
     #######################################################
     ######################  FUNCTIONS  ###########################
     #######################################################
@@ -38,7 +46,7 @@ if [ ! -e /root/apps/$CONTAINER_FIRST_STARTUP ]; then
     echo "installing Admin..."
     cd /root/apps/admin || exit
 
-    git checkout develop && \
+    # git checkout develop && \
     cp .env.example .env.local && cp .env.example .env.testing && cp .env.example .env.production && \
     cp firebase.example.json firebase.json && \
     npm install --no-interaction && \
