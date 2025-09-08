@@ -72,7 +72,9 @@ services:
       - backend
     ports:
       - "8000:8000"
+    tty: true
     volumes:
       - ../ia-app:/app
     environment:
       - PYTHONPATH=/app
+      - SHELL=/bin/zsh

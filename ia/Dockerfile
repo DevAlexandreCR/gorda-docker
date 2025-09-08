@@ -25,12 +25,6 @@ RUN apt-get update && apt-get install -y \
 # Install pipenv
 RUN pip3 install pipenv
 
-# Copy Pipfile and Pipfile.lock (if they exist)
-COPY Pipfile* ./
-
-# Install dependencies if Pipfile exists
-RUN if [ -f "Pipfile" ]; then pipenv install --system --deploy; fi
-
 # Install Oh My Zsh for the node user
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc" && \
