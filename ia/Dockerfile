@@ -11,13 +11,13 @@ WORKDIR /app
 
 # Update package list and install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-venv \
-    python3-dev \
     build-essential \
     curl \
     git \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-venv \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
