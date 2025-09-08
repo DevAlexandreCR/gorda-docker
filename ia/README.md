@@ -10,7 +10,7 @@ This is the IA (Artificial Intelligence) service container for the Gorda project
 ## Setup
 
 The container is configured to keep running and provides a Python environment with pipenv.
-You can create your application later and it will be available in the `/app/src` directory.
+You can create your application later and it will be available in the `/app` directory.
 
 1. Start the container:
    ```bash
@@ -24,7 +24,7 @@ You can create your application later and it will be available in the `/app/src`
 
 3. Inside the container, you can:
    - Install dependencies: `pipenv install <package>`
-   - Create your application files in `/app/src`
+   - Create your application files in `/app`
    - Run your Python applications
 
 ## Docker
