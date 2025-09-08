@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     python3-pip \
     python3-venv \
+    zsh \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -55,9 +56,6 @@ bindkey "^?" backward-delete-char\n' >> /root/.zshrc && \
     echo "" >> /root/.bashrc && \
     echo "" >> /root/.zshrc && \
     echo "" >> /root/.zshrc
-
-# Create app directory structure
-RUN mkdir -p /app/src
 
 # Expose port (adjust as needed for your future application)
 EXPOSE 8000

@@ -73,6 +73,6 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ../ia-app:/app/src
+      - ../ia-app:/app
     environment:
       - PYTHONPATH=/app
