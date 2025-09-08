@@ -59,3 +59,20 @@ services:
       - "6379:6379"
     volumes:
       - ./redis/redis-data:/data
+  ia:
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+    container_name: ia_service
+    build:
+      context: ./ia
+    networks:
+      - backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../ia-app:/app/src
+    environment:
+      - PYTHONPATH=/app
