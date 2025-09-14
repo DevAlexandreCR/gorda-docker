@@ -1,6 +1,8 @@
 networks:
   backend:
   frontend:
+volumes:
+  postgres_data:
 services:
   gorda:
     deploy:
@@ -13,11 +15,21 @@ services:
       context: .
     networks:
       - frontend
+      - backend
     ports:
       - "6000:6000"
       - "3000:3000"
     volumes:
       - ../:/root/apps
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=gorda_db
+      - DB_USER=root
+      - DB_PASSWORD=root123
+    depends_on:
+      postgres:
+        condition: service_healthy
   emulators:
     deploy:
       resources:
@@ -59,6 +71,31 @@ services:
       - "6379:6379"
     volumes:
       - ./redis/redis-data:/data
+  postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+    container_name: postgres_db
+    build:
+      context: ./db
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_ROOT_PASSWORD=${POSTGRES_ROOT_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   ia:
     deploy:
       resources:
@@ -78,3 +115,11 @@ services:
     environment:
       - PYTHONPATH=/app
       - SHELL=/bin/zsh
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=gorda_db
+      - DB_USER=root
+      - DB_PASSWORD=root123
+    depends_on:
+      postgres:
+        condition: service_healthy
