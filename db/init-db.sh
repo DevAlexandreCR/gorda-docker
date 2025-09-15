@@ -2,7 +2,7 @@
 set -e
 
 # This script will be executed during container initialization
-# It creates the root user with the specified password
+# It creates the root user with the specified password and enables PostGIS
 
 echo "Creating root user with password..."
 
@@ -20,3 +20,15 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
 EOSQL
 
 echo "Root user created successfully!"
+
+echo "Enabling PostGIS extension..."
+
+# Enable PostGIS extension
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE EXTENSION IF NOT EXISTS postgis;
+    CREATE EXTENSION IF NOT EXISTS postgis_topology;
+    CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+    CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;
+EOSQL
+
+echo "PostGIS extension enabled successfully!"

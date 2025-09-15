@@ -1,4 +1,4 @@
-FROM postgres:15-alpine
+FROM postgis/postgis:15-3.4-alpine
 
 # Install additional packages and create database directory
 RUN apk add --no-cache bash curl && \
