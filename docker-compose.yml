@@ -19,6 +19,7 @@ services:
     ports:
       - "6000:6000"
       - "3000:3000"
+      - "4200:4200"
     volumes:
       - ../:/root/apps
     environment:
