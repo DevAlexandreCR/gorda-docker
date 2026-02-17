@@ -5,6 +5,8 @@ volumes:
   postgres_data:
 services:
   gorda:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:
@@ -73,6 +75,7 @@ services:
     volumes:
       - ./redis/redis-data:/data
   postgres:
+    platform: linux/amd64
     deploy:
       resources:
         limits:
