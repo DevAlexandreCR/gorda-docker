@@ -54,6 +54,7 @@ services:
       AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
       DATABASE_EMULATOR_HOST: emulators
       DATABASE_EMULATOR_PORT: 9000
+      FIRESTORE_EMULATOR_HOST: emulators:8080
       STORAGE_EMULATOR_HOST: http://emulators:9199
       FIREBASE_DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
       GORDA_API_FUNCTIONS: http://emulators:5001/gorda-driver/us-central1/api
@@ -109,6 +110,7 @@ services:
     ports:
       - "4000:4000"
       - "5001:5001"
+      - "8080:8080"
       - "9000:9000"
       - "9099:9099"
       - "9199:9199"
@@ -131,7 +133,7 @@ services:
       echo 'Waiting for functions build artifacts...';
       sleep 2;
       done;
-      firebase emulators:start --project gorda-driver --config firebase.json --only auth,database,storage,functions,ui --import dataEmulators --export-on-exit"
+      firebase emulators:start --project gorda-driver --config firebase.json --only auth,database,firestore,storage,functions,ui --import dataEmulators --export-on-exit"
     depends_on:
       functions:
         condition: service_started
