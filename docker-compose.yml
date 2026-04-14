@@ -1,98 +1,167 @@
+name: gorda
+
 networks:
-  backend:
-  frontend:
+  app:
+
 volumes:
   postgres_data:
+
 services:
-  gorda:
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4G
-    container_name: gorda_dock
+  admin:
+    container_name: gorda_admin
     build:
       context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace/admin
     networks:
-      - frontend
-      - backend
+      - app
     ports:
-      - "6000:6000"
-      - "3000:3000"
-      - "4200:4200"
+      - "5005:5005"
     volumes:
-      - ../:/root/apps
+      - ../:/workspace
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=gorda_db
-      - DB_USER=root
-      - DB_PASSWORD=root123
+      CHOKIDAR_USEPOLLING: "true"
+    command: >
+      sh -lc "if [ ! -d node_modules ]; then npm install; fi &&
+      npx vue-cli-service serve --mode development --host 0.0.0.0 --port 5005"
+    depends_on:
+      api:
+        condition: service_started
+      emulators:
+        condition: service_started
+
+  api:
+    container_name: gorda_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace/api
+    networks:
+      - app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../:/workspace
+      - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebaseAccount.json
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      AI_SERVICE_URL: http://ia:8000
+      AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
+      DATABASE_EMULATOR_HOST: emulators
+      DATABASE_EMULATOR_PORT: 9000
+      STORAGE_EMULATOR_HOST: http://emulators:9199
+      FIREBASE_DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
+      GORDA_API_FUNCTIONS: http://emulators:5001/gorda-driver/us-central1/api
+      SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
+      CHROMIUM_PATH: /usr/bin/chromium
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+    command: >
+      sh -lc "if [ ! -d node_modules ]; then npm install; fi &&
+      npm run watch"
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
+      ia:
+        condition: service_started
+      emulators:
+        condition: service_started
+
+  functions:
+    container_name: gorda_functions
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace/functions
+    networks:
+      - app
+    volumes:
+      - ../:/workspace
+      - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
+    environment:
+      NODE_ENV: local
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebaseAccount.json
+      AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
+      DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
+      DATABASE_INSTANCE: gorda-driver-default-rtdb
+      DATABASE_EMULATOR_HOST: emulators
+      DATABASE_EMULATOR_PORT: 9000
+      STORAGE_EMULATOR_HOST: http://emulators:9199
+      GORDA_MASTER_DATA_API_URL: http://api:3000/public
+      SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
+    command: >
+      sh -lc "if [ ! -d node_modules ]; then npm install; fi &&
+      npm run watch"
+
   emulators:
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
-    container_name: emulators
-    depends_on:
-      - gorda
+    container_name: gorda_emulators
     build:
       context: ./emulators
+    working_dir: /workspace/admin
     networks:
-      - backend
+      - app
     ports:
       - "4000:4000"
-      - "4400:4400"
-      - "4500:4500"
-      - "5005:5005"
       - "5001:5001"
       - "9000:9000"
-      - "9199:9199"
       - "9099:9099"
-      - "9005:9005"
-      - "8080:8080"
-      - "9150:9150"
+      - "9199:9199"
     volumes:
-      - ../:/home/node/firebase
+      - ../:/workspace
+      - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
+    environment:
+      NODE_ENV: local
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebaseAccount.json
+      AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
+      DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
+      DATABASE_INSTANCE: gorda-driver-default-rtdb
+      DATABASE_EMULATOR_HOST: emulators
+      DATABASE_EMULATOR_PORT: 9000
+      STORAGE_EMULATOR_HOST: http://emulators:9199
+      GORDA_MASTER_DATA_API_URL: http://api:3000/public
+      SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
+    command: >
+      sh -lc "until [ -d /workspace/functions/node_modules ] && [ -f /workspace/functions/lib/index.js ]; do
+      echo 'Waiting for functions build artifacts...';
+      sleep 2;
+      done;
+      firebase emulators:start --project gorda-driver --config firebase.json --only auth,database,storage,functions,ui --import dataEmulators --export-on-exit"
+    depends_on:
+      functions:
+        condition: service_started
+
   redis:
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-    container_name: redis
-    image: redis
+    container_name: gorda_redis
+    image: redis:7-alpine
     networks:
-      - backend
+      - app
     ports:
       - "6379:6379"
     volumes:
       - ./redis/redis-data:/data
+
   postgres:
+    container_name: gorda_postgres
     platform: linux/amd64
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-    container_name: postgres_db
     build:
       context: ./db
     networks:
-      - backend
+      - app
     ports:
       - "5432:5432"
+    env_file:
+      - .env
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_ROOT_PASSWORD=${POSTGRES_ROOT_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_ROOT_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -100,30 +169,27 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
   ia:
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2G
-    container_name: ia_service
+    container_name: gorda_ia
     build:
       context: ./ia
+    working_dir: /app
     networks:
-      - backend
+      - app
     ports:
       - "8000:8000"
     tty: true
     volumes:
       - ../ia-app:/app
     environment:
-      - PYTHONPATH=/app
-      - SHELL=/bin/zsh
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=gorda_db
-      - DB_USER=root
-      - DB_PASSWORD=root123
+      PYTHONPATH: /app
+      SHELL: /bin/zsh
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
