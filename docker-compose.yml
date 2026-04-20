@@ -15,20 +15,13 @@ services:
     working_dir: /workspace/admin
     networks:
       - app
-    ports:
-      - "5005:5005"
     volumes:
       - ../:/workspace
     environment:
       CHOKIDAR_USEPOLLING: "true"
     command: >
       sh -lc "if [ ! -d node_modules ]; then npm install; fi &&
-      npx vue-cli-service serve --mode development --host 0.0.0.0 --port 5005"
-    depends_on:
-      api:
-        condition: service_started
-      emulators:
-        condition: service_started
+      npm run watch"
 
   api:
     container_name: gorda_api
@@ -109,6 +102,7 @@ services:
       - app
     ports:
       - "4000:4000"
+      - "5005:5000"
       - "5001:5001"
       - "8080:8080"
       - "9000:9000"
@@ -129,13 +123,15 @@ services:
       GORDA_MASTER_DATA_API_URL: http://api:3000/public
       SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
     command: >
-      sh -lc "until [ -d /workspace/functions/node_modules ] && [ -f /workspace/functions/lib/index.js ]; do
-      echo 'Waiting for functions build artifacts...';
+      sh -lc "until [ -d /workspace/functions/node_modules ] && [ -f /workspace/functions/lib/index.js ] && [ -f /workspace/admin/dist/index.html ]; do
+      echo 'Waiting for functions and admin build artifacts...';
       sleep 2;
       done;
-      firebase emulators:start --project gorda-driver --config firebase.json --only auth,database,firestore,storage,functions,ui --import dataEmulators --export-on-exit"
+      firebase emulators:start --project gorda-driver --config firebase.json --only auth,database,firestore,storage,functions,hosting,ui --import dataEmulators --export-on-exit"
     depends_on:
       functions:
+        condition: service_started
+      admin:
         condition: service_started
 
   redis:
