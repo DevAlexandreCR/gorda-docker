@@ -36,24 +36,6 @@ services:
     volumes:
       - ../:/workspace
       - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
-    environment:
-      NODE_ENV: development
-      PORT: 3000
-      GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebaseAccount.json
-      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public"
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      AI_SERVICE_URL: http://ia:8000
-      AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
-      DATABASE_EMULATOR_HOST: emulators
-      DATABASE_EMULATOR_PORT: 9000
-      FIRESTORE_EMULATOR_HOST: emulators:8080
-      STORAGE_EMULATOR_HOST: http://emulators:9199
-      FIREBASE_DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
-      GORDA_API_FUNCTIONS: http://emulators:5001/gorda-driver/us-central1/api
-      SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
-      CHROMIUM_PATH: /usr/bin/chromium
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
     command: >
       sh -lc "if [ ! -d node_modules ]; then npm install; fi &&
       npm run watch"
@@ -78,17 +60,6 @@ services:
     volumes:
       - ../:/workspace
       - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
-    environment:
-      NODE_ENV: local
-      GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebaseAccount.json
-      AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
-      DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
-      DATABASE_INSTANCE: gorda-driver-default-rtdb
-      DATABASE_EMULATOR_HOST: emulators
-      DATABASE_EMULATOR_PORT: 9000
-      STORAGE_EMULATOR_HOST: http://emulators:9199
-      GORDA_MASTER_DATA_API_URL: http://api:3000/public
-      SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
     command: >
       sh -lc "if [ ! -d node_modules ]; then npm install; fi &&
       npm run watch"
@@ -111,17 +82,6 @@ services:
     volumes:
       - ../:/workspace
       - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
-    environment:
-      NODE_ENV: local
-      GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebaseAccount.json
-      AUTHENTICATION_EMULATOR_HOST: http://emulators:9099
-      DATABASE_URL: http://emulators:9000/?ns=gorda-driver-default-rtdb
-      DATABASE_INSTANCE: gorda-driver-default-rtdb
-      DATABASE_EMULATOR_HOST: emulators
-      DATABASE_EMULATOR_PORT: 9000
-      STORAGE_EMULATOR_HOST: http://emulators:9199
-      GORDA_MASTER_DATA_API_URL: http://api:3000/public
-      SERVER_API_KEY: ${SERVER_API_KEY:-your-secret-api-key-here}
     command: >
       sh -lc "until [ -d /workspace/functions/node_modules ] && [ -f /workspace/functions/lib/index.js ] && [ -f /workspace/admin/dist/index.html ]; do
       echo 'Waiting for functions and admin build artifacts...';
