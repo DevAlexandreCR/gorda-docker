@@ -6,3 +6,4 @@ ssh_key_id_rsa.pub
 emulators/firebaseAccount.json
 .env
 ia/Pipfile
+.claude/
