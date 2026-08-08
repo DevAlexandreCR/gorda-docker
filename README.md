@@ -33,3 +33,4 @@ docker compose down
 - Firestore is exposed locally on `localhost:8080`; host-based `api` runs should set `FIRESTORE_EMULATOR_HOST=localhost:8080`.
 - Functions runtime execution stays inside the `emulators` service; the `functions` service only keeps `lib/` updated.
 - The local stack keeps RTDB/Auth/Firestore/Storage emulation for operational flows and migration backfills, plus PostgreSQL for migrated datasets.
+- The `ia` container does not auto-start the app (its Dockerfile ends in `tail -f /dev/null`); see `ia-app/README.md` for the local start command and the production deploy procedure.
