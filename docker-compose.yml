@@ -35,8 +35,9 @@ services:
     dns:
       - 8.8.8.8
       - 8.8.4.4
+    # Loopback-only publish: reachable from this machine, not from the network (see libi incident 2026-08-27).
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - ../:/workspace
       - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
@@ -76,13 +77,13 @@ services:
     networks:
       - app
     ports:
-      - "4000:4000"
-      - "5005:5000"
-      - "5001:5001"
-      - "8080:8080"
-      - "9000:9000"
-      - "9099:9099"
-      - "9199:9199"
+      - "127.0.0.1:4000:4000"
+      - "127.0.0.1:5005:5000"
+      - "127.0.0.1:5001:5001"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9099:9099"
+      - "127.0.0.1:9199:9199"
     volumes:
       - ../:/workspace
       - ../api/firebaseAccount.json:/tmp/firebaseAccount.json:ro
@@ -104,7 +105,7 @@ services:
     networks:
       - app
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - ./redis/redis-data:/data
 
@@ -116,7 +117,7 @@ services:
     networks:
       - app
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     env_file:
       - .env
     environment:
@@ -140,7 +141,7 @@ services:
     networks:
       - app
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     tty: true
     volumes:
       - ../ia-app:/app
