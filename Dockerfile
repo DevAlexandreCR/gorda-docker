@@ -1,11 +1,10 @@
-FROM node:20-bullseye
+FROM node:20-bookworm
 
 LABEL maintainer="devalexandrecr@gmail.com"
 
 USER root
 
 RUN apt-get update && apt-get install -y \
-    chromium \
     git \
     python3 \
     make \
@@ -15,11 +14,8 @@ RUN apt-get update && apt-get install -y \
     openssl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN npm install --location=global npm@latest \
+RUN npm install --location=global npm@10 \
     && npm install --location=global firebase-tools
-
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV CHROMIUM_PATH=/usr/bin/chromium
 
 WORKDIR /workspace
 
